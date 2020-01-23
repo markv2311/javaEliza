@@ -1,4 +1,3 @@
-
 //Mark Valeriani 
 import java.util.*;
 
@@ -15,7 +14,10 @@ public class ai{
             System.out.print("User: ");
             response = user.nextLine();// the users response
             sentence = response.toLowerCase().split(" ");
-            System.out.printf(eliza(response, sentence)); // what eliza is going to respond with
+            if (sentence[0].equals("")) // check if it is empty first so it doesn't run through all the code 
+                System.out.print("Please type to continue! \n");
+            else
+                System.out.printf(eliza(response, sentence)); // what eliza is going to respond with
         }
 
     }
@@ -33,16 +35,6 @@ public class ai{
 
         if (sentence[0].equals("hello") || sentence[0].equals("hi" )){ // saying hello to the person or the start of the conversation 
             return  "Hello how are you, lets talk! \n"; 
-        } 
-        if (sentence[0].equals("yes")){
-            elizaRespond[countresponses] =  " You sound pretty positive, contuinue.\n"; // focusing on the yes and no 
-            countresponses++;
-            negResponse = true;
-        } 
-        if (sentence[0].equals("no")){
-            elizaRespond[countresponses] = "You sound pretty negative, contuinue.\n";// focusing on the yes and no 
-            countresponses++;
-            negResponse = true;
         }
         if (mem == true){
             return shortTerm(member, family);
@@ -82,8 +74,25 @@ public class ai{
             }
         } 
         for  (int i =  0; i <= sentence.length-1; i++){ // going to be the main loop to run through all cases 
+            
+            if (sentence[i].equals("yes")){
+                elizaRespond[countresponses] =  " You sound pretty positive, contuinue.\n"; // focusing on the yes and no 
+                countresponses++;
+                negResponse = true;
+            } 
+            if (sentence[i].equals("no")){
+                elizaRespond[countresponses] = "You sound pretty negative, contuinue.\n";// focusing on the yes and no 
+                countresponses++;
+                negResponse = true;
+            }
+            if (sentence[i].equals("name") || sentence[i].equals("names") || sentence[i].equals("named") ){
+                elizaRespond[countresponses] = "We don't need to mention any names, just continue talking.\n";
+                countresponses++;    // making sure they don't have to mention any names, but it is still going to be a random eliza answer  
+                negResponse = true;
+            }
+            
             if (i != sentence.length-1){
-                if (sentence[i].equals("i") && sentence[i+1].equals("need") || sentence[i+1].equals("want"))  {
+                if (sentence[i].equals("i") && sentence[i+1].equals("need") || sentence[i].equals("i") && sentence[i+1].equals("want"))  {
                     int picks = rand.nextInt(4); //working with what the user would want or need in their life 
                     switch (picks){
                         case 0:
@@ -183,25 +192,25 @@ public class ai{
                 }
                 
             } 
-            if (sentence[i].equals("maybe") || sentence[i].equals("perhaps")){ // talking about uncertainty 
+            if (sentence[i].equals("maybe") || sentence[i].equals("perhaps") || sentence[i].equals("kinda") || sentence[i].equals("sorta") || sentence[i].equals("probably")){ // talking about uncertainty 
                 elizaRespond[countresponses] = "You sound uncertain of things, could this be affecting you? \n";
                 countresponses++;
                 negResponse = true;
             }
             if (sentence[i].equals("sorry")){ // don't be sorry lets talk more 
-                elizaRespond[countresponses] = "Don't be sorry. Lets keep chatting about... \n";
+                elizaRespond[countresponses] = "Don't be sorry. Lets keep chatting about it... \n";
                 countresponses++;
                 negResponse = true;
             }
-            if (i != sentence.length-1){
-                if (sentence[i].equals("are")){
+            if (i != sentence.length-1){ // not to put focus on eliza only the person speaking 
+                if (sentence[i].equals("are")){ // the if before this is so no array index out of bounds
                     if (sentence[i+1].equals("you")){
                         return "Lets not focus on me but focus on you...";
                     }
                 }
             }
-            if (i != sentence.length-1){
-                if (sentence[i].equals("you")){
+            if (i != sentence.length-1){ // if for the reason of arrayindexoutofbounds
+                if (sentence[i].equals("you")){ // chcking the ressemblance 
                     if (sentence[i+1].equals("look") || sentence[i+1].equals("sound") || sentence[i+1].equals("are") || sentence[i+1].equals("act")){
                         if (sentence[i+2].equals("like")){
                             return "Well what resemblance do you see?\n";
@@ -233,8 +242,8 @@ public class ai{
                         break;   
                 }
             }
-            if (i != sentence.length-1){
-                if (sentence[i].equals("i") && sentence[i+1].equals("dont") || sentence[i+1].equals("don't")){
+            if (i != sentence.length-1){ // array indexout of bounds checker 
+                if (sentence[i].equals("i") && sentence[i+1].equals("dont") || sentence[i].equals("i") && sentence[i+1].equals("don't")){
                     elizaRespond[countresponses] = "Why don't you ";
                     for (int e=2; e <= sentence.length - 1; e++){
                         elizaRespond[countresponses] += sentence[e] + " "; 
